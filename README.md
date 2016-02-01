@@ -1,3 +1,3 @@
-# unveil-network-sync
+# unveil-interactive
 
-Network synchronisation for [unveil](https://github.com/ostera/unveil.js).
+Interactive components for [unveil](https://github.com/ostera/unveil.js).
