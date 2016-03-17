@@ -6,6 +6,10 @@ import IFrame from '../../IFrame';
 let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default;
 
 export default React.createClass({
+  contextTypes: {
+    routerState: React.PropTypes.object.isRequired
+  },
+
   getInitialState: function () {
     return {sharingMode: false};
   },
@@ -16,7 +20,7 @@ export default React.createClass({
     this.subject
       .map((content) => ({
         content: content,
-        location: window.location.href
+        location: this.context.routerState
       }))
       .subscribe((data) => {
         socket.emit('state/slide/add:accept', data);

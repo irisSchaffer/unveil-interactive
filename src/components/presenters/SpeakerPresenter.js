@@ -1,6 +1,6 @@
-import React   from 'react';
+import React from 'react';
 // @todo this should point to the unveil dependency
-import {Utils, Notes} from '../../../../unveil-fork/src';
+import {Utils, Notes} from '../../../../unveil.js/src';
 
 export default React.createClass({
 

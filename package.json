@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/irisSchaffer/unveil-network-sync#readme",
   "dependencies": {
+    "babel-preset-stage-0": "^6.5.0",
     "unveil": "^0.1.0",
     "unveil-network-sync": "^0.0.3"
   },
