@@ -25,12 +25,12 @@ export default React.createClass({
 
     this.afterOservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => this.state.disturb)
-      .map(this.addMethod('after'))
+      .map(this.addMethod('under'))
       .subscribe(this.addRequest);
 
     this.appendObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => !this.state.disturb)
-      .map(this.addMethod('append'))
+      .map(this.addMethod('under'))
       .subscribe((e) => this.subject.next(e));
 
     this.subjectObservable = this.subject
@@ -78,8 +78,9 @@ export default React.createClass({
   addMethod: function (method) {
     return function (data) {
       return {
-        media : data,
-        method: method
+        media:    data,
+        location: data.location,
+        method:   method
       }
     };
   },
@@ -108,7 +109,7 @@ export default React.createClass({
         {this.getButton()}
         <div className="modal media-acceptor">
           <div className="modal-content">
-            <h2>Incoming Request for page "{this.state.requests[0].media.location.pathname}"</h2>
+            <h2>Incoming Request for page "{this.state.requests[0].location.pathname}"</h2>
             <div className="media-acceptor-request">
               {React.createElement(Media, {data: this.state.requests[0].media})}
             </div>

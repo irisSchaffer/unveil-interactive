@@ -35,9 +35,9 @@ export default React.createClass({
 
   toStateEvent: function (data) {
     return {
+      ...data,
       type: 'state/slide:add',
-      content: React.createElement(Media, {data: data.media}),
-      method: data.method
+      content: React.createElement(Media, {data: data.media})
     };
   },
 
