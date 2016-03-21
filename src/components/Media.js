@@ -30,7 +30,6 @@ export default React.createClass({
 
   render: function () {
     console.log(this.props.data);
-    // <cite>From <a href={this.props.data.location}>{this.props.data.location}</a></cite>
     return (
       <div>
         {this.getElement(this.props.data.content)}
