@@ -5,19 +5,12 @@ import {Utils, Notes} from '../../../../unveil.js/src';
 export default React.createClass({
 
   propTypes: {
-    unveil: React.PropTypes.object.isRequired,
+    unveil:   React.PropTypes.object.isRequired,
     controls: React.PropTypes.array.isRequired
   },
 
-  getSlide: function (indices) {
-    let slide = this.props.unveil.slides.toList()[indices[0]];
-    if (indices.length === 1 && this.props.unveil.areSlides(slide.props.children)) {
-      indices[1] = 0;
-    }
-    if(indices.length > 1)
-      return slide.props.children.toList()[indices[1]];
-    else
-      return slide
+  contextTypes: {
+    slide: React.PropTypes.node.isRequired
   },
 
   getNotes: function (slide) {
@@ -29,7 +22,8 @@ export default React.createClass({
     if (!directions || !directions.next) {
       return;
     }
-    return this.getSlide(directions.next);
+
+    return this.props.unveil.getSlide(directions.next);
   },
 
   controlsElements: function () {
@@ -47,7 +41,7 @@ export default React.createClass({
 
 
   render: function () {
-    let slide = this.getSlide(this.props.unveil.routerState.indices);
+    let slide = this.context.slide;
     let slideRight = this.getNextSlide(0);
     let slideDown = this.getNextSlide(1);
     return (
