@@ -17,7 +17,7 @@ export default React.createClass({
   setup: function () {
     this.subject = this.subject || new Subject();
 
-    this.subject
+    this.subscription = this.subject
       .map((content) => ({
         content: content,
         location: this.context.routerState
@@ -28,8 +28,8 @@ export default React.createClass({
   },
 
   tearDown: function () {
-    if (this.subject) {
-      this.subject.dispose();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   },
 
@@ -37,10 +37,10 @@ export default React.createClass({
     this.setup();
   },
 
-  //componentWillReceiveProps: function () {
-  //  this.tearDown();
-  //  this.setup();
-  //},
+  componentWillReceiveProps: function () {
+    this.tearDown();
+    this.setup();
+  },
 
   share: function () {
     this.subject.next(this.refs.textarea.value);

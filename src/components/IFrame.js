@@ -22,7 +22,7 @@ export default React.createClass({
     link = link && this.getYouTubeSrc(link) || this.props.link;
 
     return (
-      <iframe allowfullscreen src={link} width="100%" height="100%"></iframe>
+      <iframe allowFullScreen src={link} width="100%" height="100%"></iframe>
     );
   }
 
