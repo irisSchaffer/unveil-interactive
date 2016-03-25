@@ -21,69 +21,38 @@ export default React.createClass({
   },
 
   setup: function () {
-    this.acceptSubject = this.acceptSubject || new Subject();
-    this.denySubject = this.denySubject || new Subject();
+    this.subject = this.subject || new Subject();
 
-    this.denyObservable = Observable.fromEvent(socket, 'state/slide/add:deny')
-      .subscribe(this.resetRequest);
-    this.addObservable = Observable.fromEvent(socket, 'state/slide:add')
-      .subscribe(this.resetRequest);
-
-    this.afterObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
+    this.afterOservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => this.state.disturb)
       .map(this.addMethod('under'))
-<<<<<<< Updated upstream
       .subscribe(this.addRequest);
 
     this.appendObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => !this.state.disturb)
       .map(this.addMethod('under'))
       .subscribe((e) => this.subject.next(e));
-=======
-      .subscribe(this.setRequest);
 
-    this.appendObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
-      .filter((e) => !this.state.disturb)
-      .map(this.addMethod('after'))
-      .subscribe((e) => this.acceptSubject.next(e));
->>>>>>> Stashed changes
-
-    this.acceptSubscription = this.acceptSubject
+    this.subjectObservable = this.subject
       .subscribe((media) => socket.emit('state/slide:add', media));
-
-    this.denySubscription = this.denySubject
-      .subscribe((request) => socket.emit('state/slide/add:deny', request));
-  },
-
-  unsubscribe: function (observable) {
-    if (observable) {
-      observable.unsubscribe();
-    }
   },
 
   tearDown: function () {
-    this.unsubscribe(this.afterObservable)
-    this.unsubscribe(this.appendObservable);
+    if (this.afterOservable) {
+      this.afterOservable.unsubscribe();
+    }
 
-    this.unsubscribe(this.denyObservable);
-    this.unsubscribe(this.addObservable);
+    if (this.appendObservable) {
+      this.appendObservable.unsubscribe();
+    }
 
-    this.unsubscribe(this.acceptSubscription);
-    this.unsubscribe(this.denySubscription);
+    if (this.subjectObservable) {
+      this.subjectObservable.unsubscribe();
+    }
   },
 
   accept: function () {
-<<<<<<< Updated upstream
     this.subject.next(this.popRequest());
-=======
-    this.acceptSubject.next(this.state.request);
-    this.resetRequest();
-  },
-
-  deny: function () {
-    this.denySubject.next(this.state.request);
-    this.resetRequest();
->>>>>>> Stashed changes
   },
 
   getInitialState: function () {
@@ -146,11 +115,7 @@ export default React.createClass({
             </div>
             <div className="modal-buttons">
               <button onClick={this.accept}><i className="fa fa-check"></i> Accept</button>
-<<<<<<< Updated upstream
               <button onClick={this.popRequest}><i className="fa fa-times"></i> Go Away!</button>
-=======
-              <button onClick={this.deny}><i className="fa fa-times"></i> Go Away!</button>
->>>>>>> Stashed changes
             </div>
           </div>
         </div>
