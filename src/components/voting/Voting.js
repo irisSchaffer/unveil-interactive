@@ -30,32 +30,51 @@ export default class Voting extends React.Component {
     this.addAnswer = this.addAnswer.bind(this)
 
     this.state = {
-      voted:   false,
-      started: true,
-      ended:   false,
+      voted:  false,
+      active: false,
       results: {
         total: 0
       },
     }
+
+    this.setup();
   }
 
-  componentDidMount () {
-    this.socketObservable = Observable.fromEvent(socket, 'state/slide/voting:answer')
-      .filter((e) => e.type === 'state/slide/voting:answer')
-      .pluck('data')
+  setup () {
+    this.answerObservable = Observable.fromEvent(socket, 'state/slide/voting:answer')
       .filter((e) => e.voting === this.props.name)
       .pluck('answer')
       .subscribe(this.addAnswer)
+
+    this.endObservable = Observable.fromEvent(socket, 'state/slide/voting:end')
+      .do((e) => console.log('disactivating vote'))
+      .subscribe((e) => this.setState({active: false}));
+
+    this.startObservable = Observable.fromEvent(socket, 'state/slide/voting:start')
+      .do((e) => console.log('activating vote'))
+      .subscribe((e) => this.setState({active: true}));
   }
 
-  componentWillUnmount () {
-    if (this.socketObservable) {
-      this.socketObservable.unsubscribe()
+  tearDown () {
+    if (this.answerObservable) {
+      this.answerObservable.unsubscribe()
+    }
+
+    if (this.startObservable) {
+      this.startObservable.unsubscribe()
+    }
+
+    if (this.endObservable) {
+      this.endObservable.unsubscribe()
     }
   }
 
+  componentWillUnmount () {
+    this.tearDown()
+  }
+
   onChange (event) {
-    if (this.state.started) {
+    if (this.state.active) {
       this.setState({answer: event.target.value})
     }
   }
@@ -80,11 +99,8 @@ export default class Voting extends React.Component {
     event.preventDefault()
     if (this.state.answer) {
       socket.emit('state/slide/voting:answer', {
-        type: 'voting:answer',
-        data: {
-          voting: this.props.name,
-          answer: this.state.answer
-        }
+        voting: this.props.name,
+        answer: this.state.answer
       })
 
       this.setState({voted: true})
@@ -92,16 +108,17 @@ export default class Voting extends React.Component {
   }
 
   render () {
-    const { name, children } = this.props
+    const { name, children, active } = this.props
+    console.log(this.state.active)
 
     return (
       <div className="voting">
         <form>
           {children
             .filter(child => Question.isQuestion(child))
-            .map((question) => {
+            .map((question, index) => {
               return (
-                <Question {...question.props} />
+                <Question {...question.props} key={index}/>
               )
             }
           )}
@@ -111,12 +128,11 @@ export default class Voting extends React.Component {
             .filter((child) => Answer.isAnswer(child))
             .map((answer) => {
               return (
-                <li>
+                <li key={answer.props.value}>
                   {!this.state.voted && this.context.mode === 'default' && (
                     <Answer
                       {...answer.props}
                       checked={this.state.answer === answer.props.value}
-                      key={answer.props.value}
                       name={name}
                       onChange={this.onChange}
                     />
@@ -134,7 +150,7 @@ export default class Voting extends React.Component {
           </ul>
 
           {!this.state.voted && this.context.mode === 'default' && (
-            <button className="primary" type="submit" onClick={this.onSubmit}>Vote</button>
+            <button className="primary" type="submit" disabled={!this.state.active} onClick={this.onSubmit}>Vote</button>
           )}
 
         </form>

@@ -51,6 +51,14 @@ export default class VotingController extends React.Component {
     }
   }
 
+  componentDidMount () {
+    const voting = this.getVoting(this.context)
+    if (voting) {
+      console.log('starting voting')
+      socket.emit('state/slide/voting:start', {data: voting.props.name});
+    }
+  }
+
   render () {
     return false
   }
