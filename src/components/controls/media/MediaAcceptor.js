@@ -114,7 +114,7 @@ export default React.createClass({
               {React.createElement(Media, {data: this.state.requests[0].media})}
             </div>
             <div className="modal-buttons">
-              <button onClick={this.accept}><i className="fa fa-check"></i> Accept</button>
+              <button className="primary" onClick={this.accept}><i className="fa fa-check"></i> Accept</button>
               <button onClick={this.popRequest}><i className="fa fa-times"></i> Go Away!</button>
             </div>
           </div>

@@ -24,3 +24,31 @@
     display: block
     margin: 0 auto
     margin-top: 1rem
+
+  .result
+    width: 720px
+
+    @media (max-width: 768px)
+      width: 300px
+
+    h2
+      margin-bottom: 0.2em
+
+  .result-bar
+    display: block
+    height: 1em
+    width: 100%
+    position: relative
+    background-color: #ecf0f1
+    border-radius: 0.5em
+
+    .result-bar-percentage
+      transition: width .25s
+      display: block
+      height: 1em
+      position: absolute
+      background-color: #3498db
+      border-radius: 0.5em 0 0 0.5em
+
+      &.full
+        border-radius: 0.5em 0.5em 0.5em 0.5em

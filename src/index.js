@@ -11,5 +11,6 @@ export Media  from './components/Media';
 export IFrame from './components/IFrame';
 
 export Voting from './components/voting/Voting'
-export Answer from './components/voting/Answer'
 export Question from './components/voting/Question'
+export Answer from './components/voting/Answer'
+export Result from './components/voting/Result'

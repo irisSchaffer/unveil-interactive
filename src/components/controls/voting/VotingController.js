@@ -20,25 +20,25 @@ export default class VotingController extends React.Component {
 
   setup () {
     this.socketObservable = Observable.fromEvent(socket, 'state/slide/voting:answer')
-      .do((e) => console.log('receiving', e))
-      .subscribe((e) => this.props.stateSubject.next(e));
+      .subscribe((e) => this.props.stateSubject.next({
+        type: 'state/slide/voting:answer',
+        data:  e
+      }));
 
     this.stateObservable = this.context.stateSubject
-      .do((e) => console.log('sending answer', e))
-      .subscribe((answer) => socket.emit('state/slide/voting:answer', {answer}))
+      .filter((e) => e.type === 'voting:answer')
+      .pluck('data')
+      .subscribe((answer) => socket.emit('state/slide/voting:answer', answer))
   }
 
   setVoting () {
     const votings = React.Children.toArray(this.context.slide.props.children).reduce((votings, child) => {
-      console.log(votings, child, Voting.isVoting(child))
       if (Voting.isVoting(child)) {
         votings.push(child)
       }
 
       return votings
     }, [])
-
-    console.log(votings)
 
     if (votings.length > 0) {
       const voting = votings[0]
@@ -76,7 +76,7 @@ export default class VotingController extends React.Component {
 
   componentWillUpdate (nextProps, nextState) {
     if (this.state.hasVoting && !nextState.hasVoting) {
-      socket.emit('state/slide/voting:started', {});
+      socket.emit('state/slide/voting:ended', {});
     }
   }
 

@@ -7,6 +7,9 @@
   background: $eerie_black
   box-sizing: border-box
 
+  .slide
+    border-radius: .5em
+
   @media (max-width: 768px)
     padding: 0
 
@@ -23,7 +26,6 @@
       float: none
       clear: both
 
-
   .speaker-presenter-details
     float: right
     clear: right
@@ -38,6 +40,15 @@
     .speaker-presenter-controls
       height: auto
       margin: 0 0 1em 1em
+
+      button
+        color: #fff
+        border-color: #fff
+
+        &:hover
+          background-color: #fff
+          border-color: #fff
+          color: $eerie_black
 
       @media (max-width: 768px)
         margin: 0

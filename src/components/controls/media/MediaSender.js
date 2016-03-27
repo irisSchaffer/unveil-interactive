@@ -67,7 +67,7 @@ export default React.createClass({
           <p>Ask a question or share related links to articles, videos, images...</p>
           <textarea ref="textarea" />
           <div className="modal-buttons">
-            <button onClick={this.share}><i className="fa fa-share-alt"></i> Share</button>
+            <button className="primary" onClick={this.share}><i className="fa fa-share-alt"></i> Share</button>
             <button onClick={this.toggleSharingMode}><i className="fa fa-times"></i> Close</button>
           </div>
         </div>
