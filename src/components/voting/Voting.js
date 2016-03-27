@@ -15,7 +15,8 @@ export default class Voting extends React.Component {
 
   static contextTypes = {
     stateSubject: React.PropTypes.object.isRequired,
-    mode:         React.PropTypes.string.isRequired
+    mode:         React.PropTypes.string.isRequired,
+    navigatable:  React.PropTypes.bool
   };
 
   static isVoting (e) {
@@ -31,31 +32,25 @@ export default class Voting extends React.Component {
 
     this.state = {
       voted:  false,
-      active: false,
       results: {
         total: 0
       },
     }
 
-    this.setup();
+    // this.setup();
   }
 
   setup () {
+    console.log('setting up')
     this.answerObservable = Observable.fromEvent(socket, 'state/slide/voting:answer')
       .filter((e) => e.voting === this.props.name)
       .pluck('answer')
       .subscribe(this.addAnswer)
-
-    this.endObservable = Observable.fromEvent(socket, 'state/slide/voting:end')
-      .do((e) => console.log('disactivating vote'))
-      .subscribe((e) => this.setState({active: false}));
-
-    this.startObservable = Observable.fromEvent(socket, 'state/slide/voting:start')
-      .do((e) => console.log('activating vote'))
-      .subscribe((e) => this.setState({active: true}));
   }
 
   tearDown () {
+    console.log('tearing down')
+
     if (this.answerObservable) {
       this.answerObservable.unsubscribe()
     }
@@ -73,8 +68,12 @@ export default class Voting extends React.Component {
     this.tearDown()
   }
 
+  componentWillMount () {
+    this.setup()
+  }
+
   onChange (event) {
-    if (this.state.active) {
+    if (!this.context.navigatable) {
       this.setState({answer: event.target.value})
     }
   }
@@ -108,8 +107,7 @@ export default class Voting extends React.Component {
   }
 
   render () {
-    const { name, children, active } = this.props
-    console.log(this.state.active)
+    const { name, children } = this.props
 
     return (
       <div className="voting">
@@ -150,7 +148,7 @@ export default class Voting extends React.Component {
           </ul>
 
           {!this.state.voted && this.context.mode === 'default' && (
-            <button className="primary" type="submit" disabled={!this.state.active} onClick={this.onSubmit}>Vote</button>
+            <button className="primary" type="submit" disabled={this.context.navigatable} onClick={this.onSubmit}>Vote</button>
           )}
 
         </form>
