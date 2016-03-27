@@ -11,8 +11,6 @@ export default React.createClass({
     const { counter, total, title } = this.props
     let percentage = 100 * (counter / total) || 0
 
-    console.log(counter, total, counter/total)
-
     const className = 'result-bar-percentage' + (percentage >= 100 && ' full' || '')
     return (
       <div className="result">

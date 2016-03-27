@@ -14,7 +14,8 @@ export default class Voting extends React.Component {
   };
 
   static contextTypes = {
-    stateSubject: React.PropTypes.object.isRequired
+    stateSubject: React.PropTypes.object.isRequired,
+    mode:         React.PropTypes.string.isRequired
   };
 
   static isVoting (e) {
@@ -105,7 +106,7 @@ export default class Voting extends React.Component {
             .map((answer) => {
               return (
                 <li>
-                  {!this.state.voted && (
+                  {!this.state.voted && this.context.mode === 'default' && (
                     <Answer
                       {...answer.props}
                       checked={this.state.answer === answer.props.value}
@@ -126,7 +127,9 @@ export default class Voting extends React.Component {
           )}
           </ul>
 
-          {!this.state.voted && (<button className="primary" type="submit" onClick={this.onSubmit}>Vote</button>)}
+          {!this.state.voted && this.context.mode === 'default' && (
+            <button className="primary" type="submit" onClick={this.onSubmit}>Vote</button>
+          )}
 
         </form>
       </div>
