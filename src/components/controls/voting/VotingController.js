@@ -18,21 +18,8 @@ export default class VotingController extends React.Component {
     this.state = { hasVoting: false }
   }
 
-  setup () {
-    this.socketObservable = Observable.fromEvent(socket, 'state/slide/voting:answer')
-      .subscribe((e) => this.props.stateSubject.next({
-        type: 'state/slide/voting:answer',
-        data:  e
-      }));
-
-    this.stateObservable = this.context.stateSubject
-      .filter((e) => e.type === 'voting:answer')
-      .pluck('data')
-      .subscribe((answer) => socket.emit('state/slide/voting:answer', answer))
-  }
-
-  setVoting () {
-    const votings = React.Children.toArray(this.context.slide.props.children).reduce((votings, child) => {
+  getVoting (context) {
+    const votings = React.Children.toArray(context.slide.props.children).reduce((votings, child) => {
       if (Voting.isVoting(child)) {
         votings.push(child)
       }
@@ -41,48 +28,27 @@ export default class VotingController extends React.Component {
     }, [])
 
     if (votings.length > 0) {
-      const voting = votings[0]
-      // for now just look at the first one, we don't care about others
-      this.setState({
-        hasVoting: true,
-        voting: voting
-      })
-
-      if (this.votingObserver) {
-        this.votingObserver.dispose()
-      }
-    } else {
-      this.setState({
-        hasVoting: false
-      })
-    }
-  }
-
-  tearDown () {
-    if (this.socketObservable) {
-      this.socketObservable.unsubscribe();
+      // ignore other votings
+      return votings[0]
     }
 
-    if (this.stateObservable) {
-      this.stateObservable.unsubscribe();
+    return false
+  }
+
+  componentDidUpdate (prevProps, prevState, prevContext) {
+    const prevVoting = this.getVoting(prevContext)
+    const voting     = this.getVoting(this.context)
+
+    const differentVoting = prevVoting && voting && prevVoting.props.name !== voting.props.name
+    if (!prevVoting && voting || differentVoting) {
+      console.log('start voting')
+      socket.emit('state/slide/voting:start', {data: voting.props.name});
     }
-  }
 
-  componentWillReceiveProps () {
-    this.tearDown()
-    this.setup()
-    this.setVoting()
-  }
-
-  componentWillUpdate (nextProps, nextState) {
-    if (this.state.hasVoting && !nextState.hasVoting) {
-      socket.emit('state/slide/voting:ended', {});
+    if (prevVoting && !voting || differentVoting) {
+      console.log('end voting')
+      socket.emit('state/slide/voting:end', {data: prevVoting.props.name});
     }
-  }
-
-  componentDidMount () {
-    this.setup()
-    this.setVoting()
   }
 
   render () {

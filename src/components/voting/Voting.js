@@ -1,5 +1,5 @@
 import React from 'react';
-import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import Question from './Question';
 import Answer   from './Answer';
@@ -40,12 +40,18 @@ export default class Voting extends React.Component {
   }
 
   componentDidMount () {
-    this.stateObservable = this.context.stateSubject
+    this.socketObservable = Observable.fromEvent(socket, 'state/slide/voting:answer')
       .filter((e) => e.type === 'state/slide/voting:answer')
       .pluck('data')
       .filter((e) => e.voting === this.props.name)
       .pluck('answer')
       .subscribe(this.addAnswer)
+  }
+
+  componentWillUnmount () {
+    if (this.socketObservable) {
+      this.socketObservable.unsubscribe()
+    }
   }
 
   onChange (event) {
@@ -73,7 +79,7 @@ export default class Voting extends React.Component {
   onSubmit (event) {
     event.preventDefault()
     if (this.state.answer) {
-      this.context.stateSubject.next({
+      socket.emit('state/slide/voting:answer', {
         type: 'voting:answer',
         data: {
           voting: this.props.name,
