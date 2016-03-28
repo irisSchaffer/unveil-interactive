@@ -68,7 +68,17 @@ export default class Voting extends React.Component {
     this.tearDown()
   }
 
+  componentDidUpdate () {
+    localStorage.setItem('results-' + this.props.name, JSON.stringify(this.state.results))
+    localStorage.setItem('voted-' + this.props.name, JSON.stringify(this.state.voted))
+  }
+
   componentWillMount () {
+    this.setState({
+      results: JSON.parse(localStorage.getItem('results-' + this.props.name)) || {total: 0},
+      voted:   JSON.parse(localStorage.getItem('voted-' + this.props.name)) || false,
+    })
+
     this.setup()
   }
 
