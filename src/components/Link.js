@@ -2,7 +2,7 @@ import React from 'react';
 
 export default class Link extends React.Component {
   static contextTypes = {
-    mode: React.PropTypes.string.isRequired,
+    routerState: React.PropTypes.object.isRequired,
   };
 
   static propTypes = {
@@ -10,7 +10,7 @@ export default class Link extends React.Component {
   };
 
   getUrl () {
-    return '/#' + this.props.target + (this.context.mode && `?mode=${this.context.mode}` || '')
+    return '/#' + this.props.target + (this.context.routerState.query.mode && `?mode=${this.context.routerState.query.mode}` || '')
   }
 
   render () {
