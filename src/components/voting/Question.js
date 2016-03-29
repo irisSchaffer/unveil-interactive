@@ -10,7 +10,7 @@ export default React.createClass({
 
   render: function() {
     return (
-      <h1>{this.props.children}</h1>
+      <h2>{this.props.children}</h2>
     )
   }
 

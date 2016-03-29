@@ -11,6 +11,8 @@ export InitialStateListener from './components/controls/InitialStateListener';
 export Media  from './components/Media';
 export IFrame from './components/IFrame';
 
+export Redirect from './components/Redirect';
+
 export Voting from './components/voting/Voting'
 export Question from './components/voting/Question'
 export Answer from './components/voting/Answer'
