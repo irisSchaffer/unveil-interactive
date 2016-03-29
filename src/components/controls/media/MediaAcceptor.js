@@ -89,7 +89,7 @@ export default React.createClass({
     this.setState({disturb: !this.state.disturb});
   },
 
-  getButton: function (data) {
+  getButton: function () {
     let buttonClass = 'media-acceptor-button ' + (this.state.disturb && 'enabled' || 'disabled');
     let iconClass = 'fa fa-fw ' + (this.state.disturb && 'fa-bell-o' || 'fa-bell-slash-o');
     return (

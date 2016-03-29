@@ -41,9 +41,10 @@ export default React.createClass({
 
 
   render: function () {
-    let slide = this.context.slide;
-    let slideRight = this.getNextSlide(0);
-    let slideDown = this.getNextSlide(1);
+    const slide = this.context.slide;
+    const slideRight = slide.props.right && this.props.unveil.getSlide(slide.props.right) || this.getNextSlide(0);
+    const slideDown = slide.props.down && this.props.unveil.getSlide(slide.props.down) || this.getNextSlide(1);
+
     return (
       <div className="speaker-presenter">
         <div className="speaker-presenter-slide">

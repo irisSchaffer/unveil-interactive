@@ -10,7 +10,6 @@ let socket = require('../../../../unveil-network-sync/src/helpers/SocketIO').def
 export default class Voting extends React.Component {
   static propTypes = {
     name: React.PropTypes.string
-
   };
 
   static contextTypes = {
