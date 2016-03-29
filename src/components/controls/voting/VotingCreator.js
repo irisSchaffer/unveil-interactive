@@ -12,7 +12,7 @@ export default class VotingCreator extends React.Component {
   defaultState = {
       creatingMode: false,
       question:     '',
-      answers:      ['']
+      answers:      ['', '']
   };
 
   constructor (props) {
@@ -58,15 +58,14 @@ export default class VotingCreator extends React.Component {
     const question = this.refs.question.value
     const answers = this.state.answers.filter((answer) => answer.length > 0)
 
-    if (answers.length > 0 && question.length > 0) {
+    if (answers.length > 1 && question.length > 0) {
       socket.emit('state/slide/voting:add', {
         question,
         answers,
         location: this.context.routerState
       })
+      this.toggleCreatingMode()
     }
-
-    this.toggleCreatingMode()
   }
 
   render () {
@@ -85,7 +84,7 @@ export default class VotingCreator extends React.Component {
             <div className="field">
               <label>
                 Answers
-                <button className="small" onClick={this.addAnswer}><i className="fa fa-fw fa-plus"></i></button>
+                <button className="small" id="voting-creator-answer-add" onClick={this.addAnswer}><i className="fa fa-fw fa-plus"></i></button>
               </label>
               {this.state.answers.map((answer, index) => (
                   <input type="text" key={index} onChange={this.changeAnswer(index)} value={answer} placeholder={'Answer ' + (index + 1)}/>

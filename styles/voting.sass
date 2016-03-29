@@ -1,54 +1,62 @@
-#unveil .slide .voting
-  @media (max-width: 768px)
-    h1
-      font-size: 2rem
+#unveil
+  .slide .voting
+    @media (max-width: 768px)
+      h1
+        font-size: 2rem
 
-    label > *
-      font-size: 1.25em
-      line-height: 1.8em
+      label > *
+        font-size: 1.25em
+        line-height: 1.8em
+
+      button
+        font-size: 1.25em
+
+    ul
+      margin: 1em auto
+      padding-left: 0
+
+    li
+      list-style: none
+
+      input
+        margin-right: 1rem
 
     button
-      font-size: 1.25em
+      display: block
+      margin: 0 auto
+      margin-top: 1rem
 
-  ul
-    margin: 1em auto
-    padding-left: 0
+    .result
+      width: 720px
 
-  li
-    list-style: none
+      @media (max-width: 768px)
+        width: 300px
 
-    input
-      margin-right: 1rem
+      h2
+        margin-bottom: 0.2em
 
-  button
-    display: block
-    margin: 0 auto
-    margin-top: 1rem
-
-  .result
-    width: 720px
-
-    @media (max-width: 768px)
-      width: 300px
-
-    h2
-      margin-bottom: 0.2em
-
-  .result-bar
-    display: block
-    height: 1em
-    width: 100%
-    position: relative
-    background-color: #ecf0f1
-    border-radius: 0.5em
-
-    .result-bar-percentage
-      transition: width .25s
+    .result-bar
       display: block
       height: 1em
-      position: absolute
-      background-color: #3498db
-      border-radius: 0.5em 0 0 0.5em
+      width: 100%
+      position: relative
+      background-color: #ecf0f1
+      border-radius: 0.5em
 
-      &.full
-        border-radius: 0.5em 0.5em 0.5em 0.5em
+      .result-bar-percentage
+        transition: width .25s
+        display: block
+        height: 1em
+        position: absolute
+        background-color: #3498db
+        border-radius: 0.5em 0 0 0.5em
+
+        &.full
+          border-radius: 0.5em 0.5em 0.5em 0.5em
+
+  .voting-creator
+    #voting-creator-answer-add
+      float: right
+      position: relative
+      top: -.2em
+
