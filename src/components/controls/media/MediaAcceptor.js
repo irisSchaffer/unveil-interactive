@@ -30,7 +30,7 @@ export default React.createClass({
 
     this.appendObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => !this.state.disturb)
-      .map(this.addMethod('under'))
+      .map(this.addMethod('no-disturb'))
       .subscribe((e) => this.subject.next(e));
 
     this.subjectObservable = this.subject
