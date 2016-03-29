@@ -62,6 +62,7 @@ export default class VotingCreator extends React.Component {
       socket.emit('state/slide/voting:add', {
         question,
         answers,
+        name:     'voting-' + Date.now(),
         location: this.context.routerState
       })
       this.toggleCreatingMode()

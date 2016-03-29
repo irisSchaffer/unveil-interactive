@@ -36,7 +36,7 @@ export default class VotingReceiver extends React.Component {
   }
 
   toStateEvent (data) {
-    const name = 'voting-' + Date.now()
+    const name = data.name
     const question = React.createElement(Question, null, data.question)
     const answers = data.answers.map((answer, index) => {
       return React.createElement(Answer, {value: name + '-' + index}, answer)
