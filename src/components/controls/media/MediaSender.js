@@ -5,17 +5,24 @@ import IFrame from '../../IFrame';
 
 let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default;
 
-export default React.createClass({
-  contextTypes: {
+export default class MediaSender extends React.Component {
+  static contextTypes = {
     routerState: React.PropTypes.object.isRequired
-  },
+  };
 
-  getInitialState: function () {
-    return {sharingMode: false};
-  },
+  constructor (props) {
+    super(props)
 
-  setup: function () {
-    this.subject = this.subject || new Subject();
+    this.toggleSharingMode = this.toggleSharingMode.bind(this)
+    this.share = this.share.bind(this)
+
+    this.state = {
+      sharingMode: false
+    }
+  }
+
+  setup () {
+    this.subject = this.subject || new Subject()
 
     this.subscription = this.subject
       .map((content) => ({
@@ -23,56 +30,59 @@ export default React.createClass({
         location: this.context.routerState
       }))
       .subscribe((data) => {
-        socket.emit('state/slide/add:accept', data);
-      });
-  },
-
-  tearDown: function () {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  },
-
-  componentDidMount: function () {
-    this.setup();
-  },
-
-  componentWillReceiveProps: function () {
-    this.tearDown();
-    this.setup();
-  },
-
-  share: function () {
-    this.subject.next(this.refs.textarea.value);
-    this.refs.textarea.value = '';
-    this.toggleSharingMode();
-  },
-
-  toggleSharingMode: function (event) {
-    this.setState({sharingMode: !this.state.sharingMode});
-  },
-
-  render: function () {
-    if (!this.state.sharingMode) return (
-      <div className="media-sender">
-        <button onClick={this.toggleSharingMode}>
-          <i className="fa fa-share-alt"></i> Share
-        </button>
-      </div>
-    );
-    else return (
-      <div className="modal media-sender">
-        <div className="modal-content">
-          <h2>Share</h2>
-          <p>Ask a question or share related links to articles, videos, images...</p>
-          <textarea ref="textarea" />
-          <div className="modal-buttons">
-            <button className="primary" onClick={this.share}><i className="fa fa-share-alt"></i> Share</button>
-            <button onClick={this.toggleSharingMode}><i className="fa fa-times"></i> Close</button>
-          </div>
-        </div>
-      </div>
-    );
+        socket.emit('state/slide/add:accept', data)
+      })
   }
 
-});
+  tearDown () {
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
+  }
+
+  componentDidMount () {
+    this.setup()
+  }
+
+  componentWillReceiveProps () {
+    this.tearDown()
+    this.setup()
+  }
+
+  share () {
+    this.subject.next(this.refs.textarea.value)
+    this.refs.textarea.value = ''
+    this.toggleSharingMode()
+  }
+
+  toggleSharingMode (event) {
+    this.setState({sharingMode: !this.state.sharingMode});
+  }
+
+  render () {
+    return (
+      <div>
+        <div className="media-sender">
+          <button onClick={this.toggleSharingMode}>
+            <i className="fa fa-share-alt"></i> Share
+          </button>
+        </div>
+
+        {this.state.sharingMode && (
+          <div className="modal media-sender">
+            <div className="modal-content">
+              <h2>Share</h2>
+              <p>Ask a question or share related links to articles, videos, images...</p>
+              <textarea ref="textarea" />
+              <div className="modal-buttons">
+                <button className="primary" onClick={this.share}><i className="fa fa-share-alt"></i> Share</button>
+                <button onClick={this.toggleSharingMode}><i className="fa fa-times"></i> Close</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+}

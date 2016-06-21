@@ -1,105 +1,110 @@
-import React from 'react';
+import React from 'react'
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs'
 
-let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default;
-import { Slide } from 'unveil/lib';
-import Media from '../../Media';
+let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default
+import { Slide } from 'unveil/lib'
+import Media from '../../Media'
 
-export default React.createClass({
-  propTypes: {
-    navigator: React.PropTypes.object.isRequired
-  },
+export default class MediaAcceptor extends React.Component {
 
-  componentDidMount: function () {
-    this.setup();
-  },
+  constructor (props) {
+    super(props)
 
-  componentWillReceiveProps: function () {
-    this.tearDown();
-    this.setup();
-  },
+    this.popRequest = this.popRequest.bind(this)
+    this.accept = this.accept.bind(this)
+    this.addRequest = this.addRequest.bind(this)
+    this.addMethod = this.addMethod.bind(this)
+    this.toggleDisturb = this.toggleDisturb.bind(this)
 
-  setup: function () {
-    this.subject = this.subject || new Subject();
+    this.state = {
+      disturb:  true,
+      requests: []
+    }
+  }
+
+  componentDidMount () {
+    this.setup()
+  }
+
+  componentWillReceiveProps () {
+    this.tearDown()
+    this.setup()
+  }
+
+  setup () {
+    this.subject = this.subject || new Subject()
 
     this.afterOservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => this.state.disturb)
       .map(this.addMethod('under'))
-      .subscribe(this.addRequest);
+      .subscribe(this.addRequest)
 
     this.appendObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => !this.state.disturb)
       .map(this.addMethod('no-disturb'))
-      .subscribe((e) => this.subject.next(e));
+      .subscribe((e) => this.subject.next(e))
 
     this.subjectObservable = this.subject
-      .subscribe((media) => socket.emit('state/slide:add', media));
-  },
+      .subscribe((media) => socket.emit('state/slide:add', media))
+  }
 
-  tearDown: function () {
+  tearDown () {
     if (this.afterOservable) {
-      this.afterOservable.unsubscribe();
+      this.afterOservable.unsubscribe()
     }
 
     if (this.appendObservable) {
-      this.appendObservable.unsubscribe();
+      this.appendObservable.unsubscribe()
     }
 
     if (this.subjectObservable) {
-      this.subjectObservable.unsubscribe();
+      this.subjectObservable.unsubscribe()
     }
-  },
+  }
 
-  accept: function () {
-    this.subject.next(this.popRequest());
-  },
+  accept () {
+    this.subject.next(this.popRequest())
+  }
 
-  getInitialState: function () {
-    return {
-      disturb: true,
-      requests: []
-    };
-  },
-
-  popRequest: function () {
+  popRequest () {
     const request = this.state.requests[0]
     this.setState({requests: this.state.requests.slice(1)})
 
     return request
-  },
+  }
 
-  addRequest: function (request) {
+  addRequest (request) {
     let requests = this.state.requests
     requests.push(request)
-    this.setState({requests: requests});
-  },
+    this.setState({requests: requests})
+  }
 
-  addMethod: function (method) {
+  addMethod (method) {
     return function (data) {
       return {
         media:    data,
         location: data.location,
         method:   method
       }
-    };
-  },
+    }
+  }
 
-  toggleDisturb: function () {
+  toggleDisturb () {
     this.setState({disturb: !this.state.disturb});
-  },
+  }
 
-  getButton: function () {
-    let buttonClass = 'media-acceptor-button ' + (this.state.disturb && 'enabled' || 'disabled');
-    let iconClass = 'fa fa-fw ' + (this.state.disturb && 'fa-bell-o' || 'fa-bell-slash-o');
+  getButton () {
+    let buttonClass = 'media-acceptor-button ' + (this.state.disturb && 'enabled' || 'disabled')
+    let iconClass = 'fa fa-fw ' + (this.state.disturb && 'fa-bell-o' || 'fa-bell-slash-o')
     return (
       <button className={buttonClass} onClick={this.toggleDisturb}>
         <i className={iconClass}></i>
       </button>
-    );
-  },
+    )
+  }
 
-  render: function () {
+  render () {
     if (this.state.requests.length === 0) {
       return this.getButton();
     }
@@ -120,7 +125,7 @@ export default React.createClass({
           </div>
         </div>
       </div>
-    );
+    )
   }
 
-});
+}

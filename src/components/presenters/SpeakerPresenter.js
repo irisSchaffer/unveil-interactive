@@ -1,71 +1,93 @@
 import React from 'react';
 // @todo this should point to the unveil dependency
-import {Utils, Notes} from '../../../../unveil.js/src';
+import { Utils, Notes } from '../../../../unveil.js/src';
 
-export default React.createClass({
+export default class SpeakerPresenter extends React.Component {
 
-  propTypes: {
+  static propTypes = {
     unveil:   React.PropTypes.object.isRequired,
     controls: React.PropTypes.array.isRequired
-  },
+  };
 
-  contextTypes: {
+  static contextTypes = {
     slide: React.PropTypes.node.isRequired
-  },
+  };
 
-  getNotes: function (slide) {
-    return slide.props.children.toList().filter(Notes.isNotes);
-  },
+  getNotes (slide) {
+    return slide.props.children.toList().filter(Notes.isNotes)
+  }
 
-  getNextSlide: function (level) {
-    let directions = this.props.unveil.routerState.directions[level];
+  getNextSlide (level) {
+    let directions = this.props.unveil.routerState.directions[level]
     if (!directions || !directions.next) {
-      return;
+      return
     }
 
-    return this.props.unveil.getSlide(directions.next);
-  },
+    return this.props.unveil.getSlide(directions.next)
+  }
 
-  controlsElements: function () {
+  controlsElements () {
     let controls = this.props.controls.map( (control) => {
       const props = {
         key: control.displayName,
         navigator: this.props.unveil.navigator,
         stateSubject: this.props.unveil.stateSubject
-      };
-      return React.createElement(control, props);
-    });
+      }
+      return React.createElement(control, props)
+    })
 
-    return React.createElement('controls', null, controls);
-  },
+    return React.createElement('controls', null, controls)
+  }
 
 
-  render: function () {
-    const slide = this.context.slide;
-    const slideRight = slide.props.right && this.props.unveil.getSlide(slide.props.right) || this.getNextSlide(0);
-    const slideDown = slide.props.down && this.props.unveil.getSlide(slide.props.down) || this.getNextSlide(1);
+  render () {
+    const slide = this.context.slide
+    const slideRight = slide.props.right && this.props.unveil.getSlide(slide.props.right) || this.getNextSlide(0)
+    const slideDown = slide.props.down && this.props.unveil.getSlide(slide.props.down) || this.getNextSlide(1)
 
     return (
-      <div className="speaker-presenter">
-        <div className="speaker-presenter-slide">
-          {slide}
+      <div>
+        <div className="speaker-presenter desktop">
+          <div className="speaker-presenter-slide">
+            {slide}
+          </div>
+          <div className="speaker-presenter-details">
+            <div className="speaker-presenter-controls">
+              {this.controlsElements()}
+            </div>
+            <div className="speaker-presenter-slide-right">
+              {slideRight}
+            </div>
+            <div className="speaker-presenter-slide-down">
+              {slideDown}
+            </div>
+          </div>
+          <div className="speaker-presenter-notes">
+            {this.getNotes(slide)}
+          </div>
         </div>
-        <div className="speaker-presenter-details">
+
+        <div className="speaker-presenter mobile">
           <div className="speaker-presenter-controls">
             {this.controlsElements()}
           </div>
-          <div className="speaker-presenter-slide-right">
-            {slideRight}
+          <div className="speaker-presenter-slide">
+            {slide}
           </div>
-          <div className="speaker-presenter-slide-down">
-            {slideDown}
+          <div className="speaker-presenter-details">
+            <div className="speaker-presenter-slide-right">
+              {slideRight}
+            </div>
+            <div className="speaker-presenter-slide-down">
+              {slideDown}
+            </div>
           </div>
-        </div>
-        <div className="speaker-presenter-notes">
-          {this.getNotes(slide)}
+          <div className="speaker-presenter-notes">
+            {this.getNotes(slide)}
+          </div>
         </div>
       </div>
     )
   }
 
-});
+}

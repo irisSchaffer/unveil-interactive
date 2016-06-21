@@ -35,8 +35,6 @@ export default class Voting extends React.Component {
         total: 0
       },
     }
-
-    // this.setup();
   }
 
   setup () {

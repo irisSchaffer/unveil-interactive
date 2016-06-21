@@ -6,43 +6,43 @@ import Media from '../../Media';
 
 let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default;
 
-export default React.createClass({
-  propTypes: {
+export default class MediaReceiver extends React.Component {
+  static propTypes = {
     stateSubject: React.PropTypes.object.isRequired
-  },
+  };
 
-  componentDidMount: function () {
+  componentDidMount () {
     this.setup();
-  },
+  }
 
-  componentWillReceiveProps: function () {
+  componentWillReceiveProps () {
     this.tearDown();
     this.setup();
-  },
+  }
 
-  setup: function () {
+  setup () {
     this.observable = Observable.fromEvent(socket, 'state/slide:add')
       .map(this.toStateEvent)
       .distinctUntilChanged()
       .subscribe((e) => this.props.stateSubject.next(e));
-  },
+  }
 
-  tearDown: function () {
+  tearDown () {
     if (this.observable) {
       this.observable.unsubscribe();
     }
-  },
+  }
 
-  toStateEvent: function (data) {
+  toStateEvent (data) {
     return {
       ...data,
       type: 'state/slide:add',
       content: React.createElement(Media, {data: data.media})
-    };
-  },
-
-  render: function () {
-    return false;
+    }
   }
 
-});
+  render () {
+    return false
+  }
+
+}

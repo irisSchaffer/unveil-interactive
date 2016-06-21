@@ -1,34 +1,34 @@
 import React from 'react';
 import IFrame from './IFrame';
 
-export default React.createClass({
-  propTypes: {
+export default class Media extends React.Component {
+  static propTypes = {
     data: React.PropTypes.object.isRequired
-  },
+  };
 
-  isUrl: function (str) {
-    let urlRegex = new RegExp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
-    return urlRegex.test(str);
-  },
+  isUrl (str) {
+    let urlRegex = new RegExp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig)
+    return urlRegex.test(str)
+  }
 
-  isImg: function (str) {
-    let imgRegex = new RegExp(/\.(jpe?g|png|gif|bmp)$/i);
-    return imgRegex.test(str);
-  },
+  isImg (str) {
+    let imgRegex = new RegExp(/\.(jpe?g|png|gif|bmp)$/i)
+    return imgRegex.test(str)
+  }
 
-  getElement: function (data) {
+  getElement (data) {
     if (this.isUrl(data)) {
       if (this.isImg(data)) {
-        return React.createElement('img', {src: data});
+        return React.createElement('img', {src: data})
       } else {
-        return React.createElement(IFrame, {link: data});
+        return React.createElement(IFrame, {link: data})
       }
     } else {
-      return React.createElement('blockquote', {}, data);
+      return React.createElement('blockquote', {}, data)
     }
-  },
+  }
 
-  render: function () {
+  render () {
     //console.log(this.props.data);
     // <cite>From <a href={this.props.data.location}>{this.props.data.location}</a></cite>
     return (
@@ -38,4 +38,4 @@ export default React.createClass({
     )
   }
 
-});
+}

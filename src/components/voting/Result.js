@@ -1,13 +1,13 @@
 import React from 'react';
 
-export default React.createClass({
-  propTypes: {
+export default class Result extends React.Component {
+  static propTypes = {
     counter: React.PropTypes.number.isRequired,
     total:   React.PropTypes.number.isRequired,
     title:   React.PropTypes.string.isRequired
-  },
+  };
 
-  render: function() {
+  render () {
     const { counter, total, title } = this.props
     let percentage = 100 * (counter / total) || 0
 
@@ -22,4 +22,4 @@ export default React.createClass({
     )
   }
 
-});
+}

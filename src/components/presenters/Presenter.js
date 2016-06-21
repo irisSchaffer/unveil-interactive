@@ -2,12 +2,12 @@ import React from 'react';
 
 import Voting from '../voting/Voting'
 
-export default React.createClass({
+export default class Presenter extends React.Component {
 
-  propTypes: {
+  propTypes = {
     unveil: React.PropTypes.object.isRequired,
     controls: React.PropTypes.array.isRequired
-  },
+  }
 
   controlsElements: function (groups) {
     if (!groups) {

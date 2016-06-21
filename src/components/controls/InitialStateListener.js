@@ -4,28 +4,28 @@ import { Observable } from 'rxjs';
 
 let socket = require('../../../../unveil-network-sync/src/helpers/SocketIO').default;
 
-export default React.createClass({
-  propTypes: {
+export default class InitialStateListener extends React.Component {
+  static propTypes = {
     navigator: React.PropTypes.object.isRequired
-  },
-
-  setup: function () {
-    this.observable = Observable.fromEvent(socket, 'state:initial')
-      .subscribe(this.props.navigator.next);
-  },
-
-  tearDown: function () {
-    if (this.observable) {
-      this.observable.unsubscribe();
-    }
-  },
-
-  componentDidMount: function () {
-    this.setup();
-  },
-
-  render: function () {
-    return (false);
   }
 
-});
+  setup () {
+    this.observable = Observable.fromEvent(socket, 'state:initial')
+      .subscribe(this.props.navigator.next)
+  }
+
+  tearDown () {
+    if (this.observable) {
+      this.observable.unsubscribe()
+    }
+  }
+
+  componentDidMount () {
+    this.setup()
+  }
+
+  render () {
+    return (false)
+  }
+
+}

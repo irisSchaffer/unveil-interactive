@@ -1,24 +1,22 @@
 import React from 'react';
 
-export default React.createClass({
-  propTypes: {
+export default class Answer extends React.Component {
+  static propTypes = {
     value:    React.PropTypes.string.isRequired,
     name:     React.PropTypes.string.isRequired,
     onChange: React.PropTypes.func.isRequired,
     children: React.PropTypes.string.isRequired
-  },
+  };
 
-  statics: {
-    isAnswer: function(e) {
-      return React.isValidElement(e) && e.type.displayName === 'Answer'
-    }
-  },
+  static isAnswer (e) {
+    return React.isValidElement(e) && e.type.name === 'Answer'
+  };
 
-  getAnswerId: function(answer) {
+  getAnswerId (answer) {
     return 'voting-' + this.props.votingName + '-answer-' + this.props.name
-  },
+  }
 
-  render: function() {
+  render () {
     const { value, name, children, onChange } = this.props
 
     return (
@@ -29,4 +27,4 @@ export default React.createClass({
     )
   }
 
-});
+}

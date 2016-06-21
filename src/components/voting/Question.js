@@ -1,17 +1,15 @@
 import React from 'react';
 
-export default React.createClass({
+export default class Question extends React.Component {
 
-  statics: {
-    isQuestion: function(e) {
-      return React.isValidElement(e) && e.type.displayName === 'Question'
-    }
-  },
+  static isQuestion (e) {
+    return React.isValidElement(e) && e.type.name === 'Question'
+  };
 
-  render: function() {
+  render () {
     return (
       <h2>{this.props.children}</h2>
     )
   }
 
-});
+}
