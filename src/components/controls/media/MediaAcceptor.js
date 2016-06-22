@@ -63,11 +63,11 @@ export default class MediaAcceptor extends React.Component {
     }
   }
 
-  accept () {
-    this.subject.next(this.popRequest())
+  accept (method) {
+    return () => this.subject.next({ ...this.popRequest(), method })
   }
 
-  popRequest () {
+  popRequest (method) {
     const request = this.state.requests[0]
     this.setState({requests: this.state.requests.slice(1)})
 
@@ -119,8 +119,8 @@ export default class MediaAcceptor extends React.Component {
               {React.createElement(Media, {data: this.state.requests[0].media})}
             </div>
             <div className="modal-buttons">
-              <button className="primary" onClick={this.accept}><i className="fa fa-fw fa-level-down"></i> Subslide</button>
-              <button className="primary" onClick={this.accept}><i className="fa fa-fw fa-level-up fa-rotate-90"></i> Main Slide</button>
+              <button className="primary" onClick={this.accept('under')}><i className="fa fa-fw fa-level-down"></i> Subslide</button>
+              <button className="primary" onClick={this.accept('after')}><i className="fa fa-fw fa-level-up fa-rotate-90"></i> Main Slide</button>
               <button onClick={this.popRequest}><i className="fa fa-times"></i> Go Away!</button>
             </div>
           </div>

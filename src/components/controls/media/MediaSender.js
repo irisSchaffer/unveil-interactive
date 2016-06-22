@@ -74,12 +74,13 @@ export default class MediaSender extends React.Component {
   }
 
   fileChange (evt) {
+    this.fileReader = new FileReader()
     this.setState({ loaded: 0 })
     this.fileSubject.next(evt)
   }
 
   toggleSharingMode (event) {
-    this.setState({sharingMode: !this.state.sharingMode})
+    this.setState({sharingMode: !this.state.sharingMode, loaded: 0})
   }
 
   render () {
