@@ -1,4 +1,5 @@
 export MediaSender   from './components/controls/media/MediaSender';
+export LinkSender   from './components/controls/media/LinkSender';
 export MediaReceiver from './components/controls/media/MediaReceiver';
 export MediaAcceptor from './components/controls/media/MediaAcceptor';
 

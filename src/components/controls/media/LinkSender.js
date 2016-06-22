@@ -5,7 +5,7 @@ import IFrame from '../../IFrame';
 
 let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default;
 
-export default class MediaSender extends React.Component {
+export default class LinkSender extends React.Component {
   static contextTypes = {
     routerState: React.PropTypes.object.isRequired
   };
@@ -13,9 +13,8 @@ export default class MediaSender extends React.Component {
   constructor (props) {
     super(props)
 
-    this.share = this.share.bind(this)
-    this.fileChange = this.fileChange.bind(this)
     this.toggleSharingMode = this.toggleSharingMode.bind(this)
+    this.share = this.share.bind(this)
 
     this.state = {
       sharingMode: false
@@ -24,8 +23,6 @@ export default class MediaSender extends React.Component {
 
   setup () {
     this.subject = this.subject || new Subject()
-    this.fileSubject = this.fileSubject || new Subject()
-    this.fileSubject = this.fileSubject || new Subject()
 
     this.subscription = this.subject
       .map((content) => ({
@@ -35,15 +32,6 @@ export default class MediaSender extends React.Component {
       .subscribe((data) => {
         socket.emit('state/slide/add:accept', data)
       })
-
-    this.fileSubscription = this.fileSubject
-      .pluck('target', 'files', '0')
-      .subscribe((file) => {
-        console.log(file)
-      })
-
-    this.fileReaderSubscription = this.fileReaderSubject
-      .
   }
 
   tearDown () {
@@ -67,10 +55,6 @@ export default class MediaSender extends React.Component {
     this.toggleSharingMode()
   }
 
-  fileChange (evt) {
-    this.fileSubject.next(evt)
-  }
-
   toggleSharingMode (event) {
     this.setState({sharingMode: !this.state.sharingMode});
   }
@@ -78,20 +62,20 @@ export default class MediaSender extends React.Component {
   render () {
     return (
       <div>
-        <div className="media-sender">
+        <div className="link-sender">
           <button onClick={this.toggleSharingMode}>
-            <i className="fa fa-cloud-upload"></i> Media
+            <i className="fa fa-share-alt"></i> Link
           </button>
         </div>
 
         {this.state.sharingMode && (
-          <div className="modal media-sender">
+          <div className="modal link-sender">
             <div className="modal-content">
               <h2>Share</h2>
-              <p>Share your own files like pictures of notes with the presentation!</p>
-              <input type="file" className="primary" onChange={this.fileChange} />
+              <p>Share links to related articles and youtube videos with the presentation or ask a question!</p>
+              <textarea ref="textarea" />
               <div className="modal-buttons">
-                <button className="primary" onClick={this.share}><i className="fa fa-cloud-upload"></i> Share</button>
+                <button className="primary" onClick={this.share}><i className="fa fa-share-alt"></i> Share</button>
                 <button onClick={this.toggleSharingMode}><i className="fa fa-times"></i> Close</button>
               </div>
             </div>
