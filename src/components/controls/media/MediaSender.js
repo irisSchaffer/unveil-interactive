@@ -17,8 +17,6 @@ export default class MediaSender extends React.Component {
     this.fileChange = this.fileChange.bind(this)
     this.toggleSharingMode = this.toggleSharingMode.bind(this)
 
-    this.fileReader = new FileReader()
-
     this.state = {
       sharingMode: false,
       content    : null,
@@ -30,10 +28,6 @@ export default class MediaSender extends React.Component {
     this.subject = this.subject || new Subject()
     this.fileSubject = this.fileSubject || new Subject()
     this.fileReaderSubject = this.fileReaderSubject || new Subject()
-    this.fileReader.onload = (evt) => {
-      this.fileReaderSubject.next(evt)
-    }
-    this.fileReader.onprogress = (evt) => this.setState({ loaded: Math.round((evt.loaded / evt.total) * 100) })
 
     this.subscription = this.subject
       .map((content) => ({
@@ -46,6 +40,7 @@ export default class MediaSender extends React.Component {
 
     this.fileSubscription = this.fileSubject
       .pluck('target', 'files', '0')
+      .do(() => this.setUpFileReader())
       .subscribe((file) => this.fileReader.readAsDataURL(file))
 
     this.fileReaderSubscription = this.fileReaderSubject
@@ -73,8 +68,13 @@ export default class MediaSender extends React.Component {
     this.toggleSharingMode()
   }
 
-  fileChange (evt) {
+  setUpFileReader () {
     this.fileReader = new FileReader()
+    this.fileReader.onload = (evt) => this.fileReaderSubject.next(evt)
+    this.fileReader.onprogress = (evt) => this.setState({ loaded: Math.round((evt.loaded / evt.total) * 100) })
+  }
+
+  fileChange (evt) {
     this.setState({ loaded: 0 })
     this.fileSubject.next(evt)
   }
