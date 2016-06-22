@@ -8,7 +8,7 @@ let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').
 export default class MediaSender extends React.Component {
   static contextTypes = {
     routerState: React.PropTypes.object.isRequired
-  };
+  }
 
   constructor (props) {
     super(props)
@@ -20,7 +20,9 @@ export default class MediaSender extends React.Component {
     this.fileReader = new FileReader()
 
     this.state = {
-      sharingMode: false
+      sharingMode: false,
+      content    : null,
+      loaded     : 0,
     }
   }
 
@@ -28,7 +30,10 @@ export default class MediaSender extends React.Component {
     this.subject = this.subject || new Subject()
     this.fileSubject = this.fileSubject || new Subject()
     this.fileReaderSubject = this.fileReaderSubject || new Subject()
-    this.fileReader.onload(fileReaderSubject.next)
+    this.fileReader.onload = (evt) => {
+      this.fileReaderSubject.next(evt)
+    }
+    this.fileReader.onprogress = (evt) => this.setState({ loaded: Math.round((evt.loaded / evt.total) * 100) })
 
     this.subscription = this.subject
       .map((content) => ({
@@ -41,12 +46,11 @@ export default class MediaSender extends React.Component {
 
     this.fileSubscription = this.fileSubject
       .pluck('target', 'files', '0')
-      .subscribe((file) => {
-        this.fileReader.readAsArrayBuffer(file)
-      })
+      .subscribe((file) => this.fileReader.readAsDataURL(file))
 
     this.fileReaderSubscription = this.fileReaderSubject
-      .subscribe((file) => console.log('file buffer', file))
+      .pluck('target', 'result')
+      .subscribe((url) => this.setState({ content: url }))
   }
 
   tearDown () {
@@ -65,17 +69,17 @@ export default class MediaSender extends React.Component {
   }
 
   share () {
-    this.subject.next(this.refs.textarea.value)
-    this.refs.textarea.value = ''
+    this.subject.next(this.state.content)
     this.toggleSharingMode()
   }
 
   fileChange (evt) {
+    this.setState({ loaded: 0 })
     this.fileSubject.next(evt)
   }
 
   toggleSharingMode (event) {
-    this.setState({sharingMode: !this.state.sharingMode});
+    this.setState({sharingMode: !this.state.sharingMode})
   }
 
   render () {
@@ -93,8 +97,11 @@ export default class MediaSender extends React.Component {
               <h2>Share</h2>
               <p>Share your own files like pictures of notes with the presentation!</p>
               <input type="file" className="primary" onChange={this.fileChange} />
+              {this.state.loaded > 0 && `${this.state.loaded}%`}
               <div className="modal-buttons">
-                <button className="primary" onClick={this.share}><i className="fa fa-cloud-upload"></i> Share</button>
+                <button className="primary" onClick={this.share} disabled={(this.state.loaded < 100)}>
+                  <i className="fa fa-cloud-upload"></i> Share
+                </button>
                 <button onClick={this.toggleSharingMode}><i className="fa fa-times"></i> Close</button>
               </div>
             </div>
@@ -103,5 +110,4 @@ export default class MediaSender extends React.Component {
       </div>
     )
   }
-
 }

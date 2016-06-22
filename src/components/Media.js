@@ -11,13 +11,18 @@ export default class Media extends React.Component {
     return urlRegex.test(str)
   }
 
+  isDataString (str) {
+    let dataUrlRegex = new RegExp(/^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i)
+    return dataUrlRegex.test(str)
+  }
+
   isImg (str) {
-    let imgRegex = new RegExp(/\.(jpe?g|png|gif|bmp)$/i)
+    let imgRegex = new RegExp(/(image\/(jpe?g|png|gif|bpm))|(\.(jpe?g|png|gif|bmp)$)/i)
     return imgRegex.test(str)
   }
 
   getElement (data) {
-    if (this.isUrl(data)) {
+    if (this.isUrl(data) || this.isDataString(data)) {
       if (this.isImg(data)) {
         return React.createElement('img', {src: data})
       } else {
