@@ -17,6 +17,8 @@ export default class MediaSender extends React.Component {
     this.fileChange = this.fileChange.bind(this)
     this.toggleSharingMode = this.toggleSharingMode.bind(this)
 
+    this.fileReader = new FileReader()
+
     this.state = {
       sharingMode: false
     }
@@ -25,7 +27,8 @@ export default class MediaSender extends React.Component {
   setup () {
     this.subject = this.subject || new Subject()
     this.fileSubject = this.fileSubject || new Subject()
-    this.fileSubject = this.fileSubject || new Subject()
+    this.fileReaderSubject = this.fileReaderSubject || new Subject()
+    this.fileReader.onload(fileReaderSubject.next)
 
     this.subscription = this.subject
       .map((content) => ({
@@ -39,11 +42,11 @@ export default class MediaSender extends React.Component {
     this.fileSubscription = this.fileSubject
       .pluck('target', 'files', '0')
       .subscribe((file) => {
-        console.log(file)
+        this.fileReader.readAsArrayBuffer(file)
       })
 
     this.fileReaderSubscription = this.fileReaderSubject
-      .
+      .subscribe((file) => console.log('file buffer', file))
   }
 
   tearDown () {

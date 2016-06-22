@@ -119,7 +119,8 @@ export default class MediaAcceptor extends React.Component {
               {React.createElement(Media, {data: this.state.requests[0].media})}
             </div>
             <div className="modal-buttons">
-              <button className="primary" onClick={this.accept}><i className="fa fa-check"></i> Accept</button>
+              <button className="primary" onClick={this.accept}><i className="fa fa-fw fa-level-down"></i> Subslide</button>
+              <button className="primary" onClick={this.accept}><i className="fa fa-fw fa-level-up fa-rotate-90"></i> Main Slide</button>
               <button onClick={this.popRequest}><i className="fa fa-times"></i> Go Away!</button>
             </div>
           </div>

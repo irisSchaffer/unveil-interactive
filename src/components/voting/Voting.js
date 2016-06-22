@@ -51,14 +51,6 @@ export default class Voting extends React.Component {
     if (this.answerObservable) {
       this.answerObservable.unsubscribe()
     }
-
-    if (this.startObservable) {
-      this.startObservable.unsubscribe()
-    }
-
-    if (this.endObservable) {
-      this.endObservable.unsubscribe()
-    }
   }
 
   componentWillUnmount () {
