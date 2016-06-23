@@ -25,6 +25,16 @@
   border-bottom-left-radius: 0 !important
   border: none !important
 
+.reaction-receiver
+  position: absolute
+  top: 50%
+  left: 50%
+
+  .reaction
+    animation-name: reaction
+    animation-duration: 2s
+
+
 .reaction-sender
   position: absolute
   bottom: 0
@@ -72,3 +82,18 @@
     margin-bottom: .2em
     font-size: .7em
 
+
+@keyframes reaction
+  0%
+    font-size: 0
+    display: none
+  50%
+    font-size: 7em
+    display: block
+  60%
+    font-size: 6em
+  70%
+    font-size: 7em
+  1000%
+    font-size: 0
+    display: none

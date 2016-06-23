@@ -1,38 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { Observable, Subject } from 'rxjs';
-import IFrame from '../../IFrame';
+import { Observable, Subject } from 'rxjs'
+import emotions from './Emotions'
 
 let socket = require('../../../../../unveil-network-sync/src/helpers/SocketIO').default;
 
-export const emotions = {
-  like: {
-    label: 'like',
-    code:  '&#128522;',
-  },
-  laughter: {
-    label: 'haha',
-    code:  '&#128514;',
-  },
-  boring: {
-    label: 'boring',
-    code:  '&#128564;',
-  },
-  louder: {
-    label: 'louder',
-    code:  '&#128265;',
-  },
-  faster: {
-    label: 'speed up',
-    code:  '&#9203;',
-  },
-  slower: {
-    label: 'slow down',
-    code:  '&#128281;'
-  }
-}
-
-export default class LinkSender extends React.Component {
+export default class ReactionSender extends React.Component {
   static contextTypes = {
     routerState: React.PropTypes.object.isRequired
   }
@@ -56,7 +29,7 @@ export default class LinkSender extends React.Component {
         location: this.context.routerState
       }))
       .subscribe((data) => {
-        socket.emit('state/slide/emotion', data)
+        socket.emit('state/slide:reaction', data)
       })
   }
 

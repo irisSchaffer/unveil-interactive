@@ -6,6 +6,7 @@ export MediaReceiver from './components/controls/media/MediaReceiver'
 export MediaAcceptor from './components/controls/media/MediaAcceptor'
 
 export ReactionSender   from './components/controls/reactions/ReactionSender'
+export ReactionReceiver   from './components/controls/reactions/ReactionReceiver'
 
 export VotingCreator from './components/controls/voting/VotingCreator'
 export VotingReceiver from './components/controls/voting/VotingReceiver'
