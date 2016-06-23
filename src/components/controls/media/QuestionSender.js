@@ -50,7 +50,7 @@ export default class LinkSender extends React.Component {
   }
 
   share () {
-    this.subject.next(this.refs.textarea.value)
+    this.subject.next(`Question: ${this.refs.textarea.value}`)
     this.refs.textarea.value = ''
     this.toggleSharingMode()
   }
@@ -61,21 +61,21 @@ export default class LinkSender extends React.Component {
 
   render () {
     return (
-      <div className="link-sender">
-        <div className="link-sender">
+      <div className="question-sender">
+        <div className="question-sender">
           <button onClick={this.toggleSharingMode}>
-            <i className="fa fa-share-alt"></i> Link
+            <i className="fa fa-question"></i> Question
           </button>
         </div>
 
         {this.state.sharingMode && (
-          <div className="modal link-sender">
+          <div className="modal question-sender">
             <div className="modal-content">
-              <h2>Share</h2>
-              <p>Share links to related articles and youtube videos with the presentation or ask a question!</p>
+              <h2>Question</h2>
+              <p>Ask a question!</p>
               <textarea ref="textarea" />
               <div className="modal-buttons">
-                <button className="primary" onClick={this.share}><i className="fa fa-share-alt"></i> Share</button>
+                <button className="primary" onClick={this.share}><i className="fa fa-send"></i> Ask</button>
                 <button onClick={this.toggleSharingMode}><i className="fa fa-times"></i> Close</button>
               </div>
             </div>

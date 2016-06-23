@@ -85,7 +85,7 @@ export default class MediaSender extends React.Component {
 
   render () {
     return (
-      <div>
+      <div className="media-sender">
         <div className="media-sender">
           <button onClick={this.toggleSharingMode}>
             <i className="fa fa-cloud-upload"></i> Media
