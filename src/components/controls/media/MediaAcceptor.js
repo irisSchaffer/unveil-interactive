@@ -14,7 +14,7 @@ export default class MediaAcceptor extends React.Component {
     this.popRequest = this.popRequest.bind(this)
     this.accept = this.accept.bind(this)
     this.addRequest = this.addRequest.bind(this)
-    this.addMethod = this.addMethod.bind(this)
+    this.formatRequest = this.formatRequest.bind(this)
     this.toggleDisturb = this.toggleDisturb.bind(this)
 
     this.state = {
@@ -35,27 +35,30 @@ export default class MediaAcceptor extends React.Component {
   setup () {
     this.subject = this.subject || new Subject()
 
-    this.afterOservable = Observable.fromEvent(socket, 'state/slide/add:accept')
+    this.disturbObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => this.state.disturb)
-      .map(this.addMethod('under'))
+      .do((e) => console.log('disturb observable'))
+      .map(this.formatRequest())
       .subscribe(this.addRequest)
 
-    this.appendObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
+    this.noDisturbObservable = Observable.fromEvent(socket, 'state/slide/add:accept')
       .filter((e) => !this.state.disturb)
-      .map(this.addMethod('no-disturb'))
+      .map(this.formatRequest())
+      .map((r) => ({...r, method : 'under'}))
       .subscribe((e) => this.subject.next(e))
 
     this.subjectObservable = this.subject
+      .do((e) => console.log('subject observable'))
       .subscribe((media) => socket.emit('state/slide:add', media))
   }
 
   tearDown () {
-    if (this.afterOservable) {
-      this.afterOservable.unsubscribe()
+    if (this.disturbObservable) {
+      this.disturbObservable.unsubscribe()
     }
 
-    if (this.appendObservable) {
-      this.appendObservable.unsubscribe()
+    if (this.noDisturbObservable) {
+      this.noDisturbObservable.unsubscribe()
     }
 
     if (this.subjectObservable) {
@@ -64,6 +67,7 @@ export default class MediaAcceptor extends React.Component {
   }
 
   accept (method) {
+    console.log('accepting request')
     return () => this.subject.next({ ...this.popRequest(), method })
   }
 
@@ -80,12 +84,11 @@ export default class MediaAcceptor extends React.Component {
     this.setState({requests: requests})
   }
 
-  addMethod (method) {
+  formatRequest () {
     return function (data) {
       return {
         media:    data,
         location: data.location,
-        method:   method
       }
     }
   }

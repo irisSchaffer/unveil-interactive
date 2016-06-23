@@ -44,9 +44,10 @@ export default class SpeakerPresenter extends React.Component {
     const slide = this.context.slide
     const slideRight = slide.props.right && this.props.unveil.getSlide(slide.props.right) || this.getNextSlide(0)
     const slideDown = slide.props.down && this.props.unveil.getSlide(slide.props.down) || this.getNextSlide(1)
+    const width = Math.max(document.documentElement.clientWidth, window.innerWidth)
 
-    return (
-      <div>
+    if (width > 768) {
+      return (
         <div className="speaker-presenter desktop">
           <div className="speaker-presenter-slide">
             {slide}
@@ -66,25 +67,27 @@ export default class SpeakerPresenter extends React.Component {
             {this.getNotes(slide)}
           </div>
         </div>
+      )
+    }
 
-        <div className="speaker-presenter mobile">
-          <div className="speaker-presenter-controls">
-            {this.controlsElements()}
+    return (
+      <div className="speaker-presenter mobile">
+        <div className="speaker-presenter-controls">
+          {this.controlsElements()}
+        </div>
+        <div className="speaker-presenter-slide">
+          {slide}
+        </div>
+        <div className="speaker-presenter-details">
+          <div className="speaker-presenter-slide-right">
+            {slideRight}
           </div>
-          <div className="speaker-presenter-slide">
-            {slide}
+          <div className="speaker-presenter-slide-down">
+            {slideDown}
           </div>
-          <div className="speaker-presenter-details">
-            <div className="speaker-presenter-slide-right">
-              {slideRight}
-            </div>
-            <div className="speaker-presenter-slide-down">
-              {slideDown}
-            </div>
-          </div>
-          <div className="speaker-presenter-notes">
-            {this.getNotes(slide)}
-          </div>
+        </div>
+        <div className="speaker-presenter-notes">
+          {this.getNotes(slide)}
         </div>
       </div>
     )

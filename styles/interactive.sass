@@ -78,15 +78,22 @@
         width: 100%
 
       img
-        height: 200px
+        max-height: 200px
+        max-width: 100%
 
       .modal-buttons
         margin: 1em 0 0 0
 
-        button
-          margin-right: 1em
-          &:last-child
-            margin-right: 0
+        @media (min-width: 768px)
+          button
+            margin-right: 1em
+            &:last-child
+              margin-right: 0
+
+        @media (max-width: 768px)
+          text-align: center
+          button
+            margin-top: .5em
 
       h2
         font-size: 1.5em
