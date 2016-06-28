@@ -19,22 +19,19 @@
   },
   "homepage": "https://github.com/irisSchaffer/unveil-network-sync#readme",
   "dependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babelify": "^7.3.0",
+    "reactify": "^1.1.1",
     "unveil": "^0.1.0",
     "unveil-network-sync": "^0.0.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.5",
-    "babel-jest": "^6.0.1",
-    "babel-plugin-transform-runtime": "^6.4.3",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-stage-0": "^6.5.0",
-    "babelify": "^7.2.0",
     "browserify": "^6.2.0",
     "envify": "^3.0.0",
-    "jest-cli": "^0.8.2",
-    "react-addons-test-utils": "^0.14.6",
-    "reactify": "^0.15.2",
     "uglify-js": "~2.4.15",
     "watchify": "^2.1.1"
   },
@@ -47,22 +44,6 @@
       "babelify",
       "envify",
       "reactify"
-    ]
-  },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "<rootDir>/build/",
-      "<rootDir>/node_modules/",
-      "<rootDir>/styles/"
-    ],
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "testPathIgnorePatterns": [
-      "fixtures"
-    ],
-    "testRunner": "<rootDir>/node_modules/jest-cli/src/testRunners/jasmine/jasmine2.js",
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules",
-      "fixtures"
     ]
   },
   "scripts": {
