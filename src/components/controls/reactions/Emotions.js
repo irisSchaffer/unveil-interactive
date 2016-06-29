@@ -13,14 +13,14 @@ export default {
   },
   louder: {
     label: 'louder',
-    code:  '&#128265;',
+    code:  '&#128226;',
   },
   faster: {
     label: 'speed up',
-    code:  '&#9203;',
+    code:  '&#127939;',
   },
   slower: {
     label: 'slow down',
-    code:  '&#128281;'
+    code:  '&#9203;'
   }
 }
