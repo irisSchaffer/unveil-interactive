@@ -20,21 +20,26 @@
 
   .reaction-emotion
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 1)
+    font-size: 1em
 
   .reaction-count
     background-color: $eerie_black
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3)
     color: white
     border-radius: 1em
-    font-size: 0.7rem
-    line-height: 1rem
+    font-size: .4em
+    line-height: .7em
     vertical-align: middle
     text-align: center
+
     position: relative
-    top: -0.5rem
-    left: -.1rem
-    height: 1rem
-    width: 1rem
+    top: -1em
+    left: -0.7em
+
+    height: .8em
+    width: .8em
+    padding: .2em
+
     display: inline-block
 
 .reaction-sender
@@ -98,3 +103,13 @@
 
     @media (min-width: 768px)
       color: #000
+
+.projector .reaction-receiver
+  position: absolute
+  bottom: 0
+  left : 0
+  right: 0
+  width: 100%
+
+  .reaction
+    font-size: 2rem
