@@ -55,7 +55,7 @@ export default class ReactionSender extends React.Component {
     const width = Math.max(document.documentElement.clientWidth, window.innerWidth)
     return (
       <div className="reaction-sender">
-        {width <= 768 && (<button className={`reaction-opener ${this.state.open && 'open' || 'close'}`} onClick={this.toggleEmotionMode} ><i className="fa fa-thumbs-up"></i>  Emotions</button>)}
+        {width <= 768 && (<button className={`reaction-opener ${this.state.open && 'open' || 'close'}`} onClick={this.toggleEmotionMode} ><i className="fa fa-thumbs-up"></i>  Reactions</button>)}
         <div className="emotions" style={{maxHeight: ((width > 768 || this.state.open) && '150px' || 0)}}>
           {Object.keys(emotions).map((id) => (
             <div key={id} onClick={() => this.subject.next(id)} className="emotion">
